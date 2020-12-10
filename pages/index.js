@@ -1,8 +1,22 @@
 import Head from "next/head";
+import makeRequest from "../utilities/makeRequest";
 import styles from "../styles/Home.module.css";
+import useSwr from "swr";
+import { gql } from "graphql-request";
 
-export default function Home(props) {
-  console.log(props);
+export default function Home() {
+  const { data, error } = useSwr(
+    gql`
+      {
+        allRecipes {
+          data {
+            name
+          }
+        }
+      }
+    `,
+    makeRequest
+  );
 
   return (
     <div className={styles.container}>
@@ -19,7 +33,7 @@ export default function Home(props) {
           An app for collecting family recipes.
         </p>
 
-        <p>{JSON.stringify(props.data.map(({ data }) => data))}</p>
+        <p>{JSON.stringify(error || data)}</p>
       </main>
 
       <footer className={styles.footer}>
@@ -27,18 +41,4 @@ export default function Home(props) {
       </footer>
     </div>
   );
-}
-
-export async function getServerSideProps() {
-  const url = [process.env.BASE_URL, "api", "hello"].join("/");
-  const response = await fetch(url);
-  const data = await response.json();
-
-  return data
-    ? {
-        props: data.recipes,
-      }
-    : {
-        notFound: true,
-      };
 }

@@ -1,24 +1,12 @@
-import faunadb from "faunadb";
-const { query } = faunadb;
-
-const client = new faunadb.Client({
-  secret: process.env.FAUNADB_SECRET,
-});
-
-export default async (_, response) => {
+export default async (request, response) => {
   response.setHeader("Content-Type", "application/json");
 
   try {
-    const recipes = await client.query(
-      query.Map(
-        query.Paginate(query.Documents(query.Collection("recipes"))),
-        query.Lambda((recipe) => query.Get(recipe))
-      )
-    );
+    const hello = "hello";
 
     response.statusCode = 200;
     response.send({
-      recipes,
+      hello,
     });
   } catch (error) {
     response.statusCode = 500;
