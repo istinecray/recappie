@@ -27,7 +27,7 @@ export default function Home(props) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const url = [process.env.BASE_URL, "api", "hello"].join("/");
   const response = await fetch(url);
   const data = await response.json();
