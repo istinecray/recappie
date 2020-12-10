@@ -2,6 +2,8 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
 export default function Home(props) {
+  console.log(props);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -17,7 +19,7 @@ export default function Home(props) {
           An app for collecting family recipes.
         </p>
 
-        <p>{JSON.stringify(props.recipes.data.map(({ data }) => data))}</p>
+        <p>{JSON.stringify(props.data.map(({ data }) => data))}</p>
       </main>
 
       <footer className={styles.footer}>
