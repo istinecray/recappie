@@ -11,6 +11,9 @@ export default function Home() {
         allRecipes {
           data {
             name
+            family {
+              name
+            }
           }
         }
       }
