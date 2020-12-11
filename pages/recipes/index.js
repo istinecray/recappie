@@ -1,16 +1,11 @@
 import Footer from "components/Footer";
 import Head from "next/head";
 import Header from "components/Header";
-import fetcher from "utilities/fetcher";
+import Link from "next/link";
 import styles from "styles/Home.module.css";
-import useSwr from "swr";
+import { getRecipes } from "pages/api/recipes";
 
-export default function Home() {
-  const { data, error } = useSwr(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/recipes`,
-    fetcher
-  );
-
+export default function Home({ recipes }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -21,13 +16,30 @@ export default function Home() {
       <Header />
 
       <main className={styles.main}>
-        <p>
-          {![data, error].some(Boolean) && "Loading..."}
-          {JSON.stringify(error || data)}
-        </p>
+        <ul>
+          <li>
+            <Link href="/recipes/add">
+              <a>Add a Recipe</a>
+            </Link>
+          </li>
+        </ul>
+
+        <p>{JSON.stringify(recipes)}</p>
       </main>
 
       <Footer />
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const recipes = await getRecipes();
+
+  const props = {
+    recipes,
+  };
+
+  return {
+    props,
+  };
 }

@@ -10,13 +10,13 @@ const runQuery = async (query) => {
     "Content-Type": "application/json",
   };
 
-  const response = await fetch(process.env.GRAPHQL_URL, {
+  const { data } = await fetch(process.env.GRAPHQL_URL, {
     body,
     headers,
     method: "POST",
   }).then(getJson);
 
-  return response;
+  return data;
 };
 
 export default runQuery;
