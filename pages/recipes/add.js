@@ -1,4 +1,6 @@
+import Footer from "components/Footer";
 import Head from "next/head";
+import Header from "components/Header";
 import styles from "styles/Home.module.css";
 import { useForm } from "react-hook-form";
 
@@ -8,14 +10,14 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Recappie</title>
+        <title>Recappie | Add Recipe</title>
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Recappie</h1>
+      <Header />
 
+      <main className={styles.main}>
         <form onSubmit={handleSubmit(console.log)}>
           <label>
             <div>Recipe Name</div>
@@ -37,9 +39,7 @@ export default function Home() {
         </form>
       </main>
 
-      <footer className={styles.footer}>
-        &copy; {new Date().getFullYear()}
-      </footer>
+      <Footer />
     </div>
   );
 }

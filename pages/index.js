@@ -1,5 +1,6 @@
 import Head from "next/head";
-import Link from "next/link";
+import Footer from "components/Footer";
+import Header from "components/Header";
 import styles from "styles/Home.module.css";
 
 export default function Home() {
@@ -12,25 +13,15 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Header />
+
       <main className={styles.main}>
-        <ul>
-          <li>
-            <Link href="/recipes">
-              <a>Recipes</a>
-            </Link>
-          </li>
-        </ul>
-
-        <h1 className={styles.title}>Recappie</h1>
-
         <p className={styles.description}>
           An app for collecting family recipes.
         </p>
       </main>
 
-      <footer className={styles.footer}>
-        &copy; {new Date().getFullYear()}
-      </footer>
+      <Footer />
     </div>
   );
 }

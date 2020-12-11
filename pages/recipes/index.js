@@ -1,6 +1,8 @@
+import Footer from "components/Footer";
 import Head from "next/head";
-import styles from "styles/Home.module.css";
+import Header from "components/Header";
 import fetcher from "utilities/fetcher";
+import styles from "styles/Home.module.css";
 import useSwr from "swr";
 
 export default function Home() {
@@ -12,22 +14,20 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Recappie</title>
+        <title>Recappie | Recipes</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Recappie</h1>
+      <Header />
 
+      <main className={styles.main}>
         <p>
           {![data, error].some(Boolean) && "Loading..."}
           {JSON.stringify(error || data)}
         </p>
       </main>
 
-      <footer className={styles.footer}>
-        &copy; {new Date().getFullYear()}
-      </footer>
+      <Footer />
     </div>
   );
 }
