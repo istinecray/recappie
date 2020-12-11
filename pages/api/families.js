@@ -8,6 +8,11 @@ export const getFamilies = async () => {
         data {
           _id
           name
+          recipes {
+            data {
+              name
+            }
+          }
         }
       }
     }

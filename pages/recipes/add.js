@@ -3,11 +3,23 @@ import Head from "next/head";
 import Header from "components/Header";
 import styles from "styles/Home.module.css";
 import { getFamilies } from "pages/api/families";
-import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 export default function Home({ families }) {
-  const { control, errors, handleSubmit, register } = useForm();
+  const getDefaultFields = (all, name) => ({
+    ...all,
+    [name]: [
+      {
+        value: "",
+      },
+    ],
+  });
+
+  const defaultValues = ["ingredients", "steps"].reduce(getDefaultFields, {});
+
+  const { control, errors, handleSubmit, register } = useForm({
+    defaultValues,
+  });
 
   const getFieldArray = (name) =>
     useFieldArray({
@@ -20,14 +32,23 @@ export default function Home({ families }) {
     { fields: stepFields, append: appendStep },
   ] = ["ingredients", "steps"].map(getFieldArray);
 
-  useEffect(() => {
-    const hasLength = ({ length }) => length;
+  const getFamily = ({ _id, name }) => (
+    <option key={_id} value={_id}>
+      {name}
+    </option>
+  );
 
-    if (![ingredientFields, stepFields].every(hasLength)) {
-      appendIngredient();
-      appendStep();
-    }
-  }, []);
+  const getIngredient = ({ id }, i) => (
+    <li key={id}>
+      <input name={`ingredients[${i}].value`} ref={register()} type="text" />
+    </li>
+  );
+
+  const getStep = ({ id }, i) => (
+    <li key={id}>
+      <textarea name={`steps[${i}].value`} ref={register()} />
+    </li>
+  );
 
   return (
     <div className={styles.container}>
@@ -37,19 +58,17 @@ export default function Home({ families }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
-
       <main className={styles.main}>
+        <Header />
+
+        <h2>Add a Recipe</h2>
+
         <form onSubmit={handleSubmit((form) => alert(JSON.stringify(form)))}>
           <label>
             <div>Family</div>
 
-            <select name="recipeFamily" ref={register}>
-              {families.map(({ _id, name }) => (
-                <option key={_id} value={_id}>
-                  {name}
-                </option>
-              ))}
+            <select name="recipeFamily" ref={register()}>
+              {families.map(getFamily)}
             </select>
           </label>
 
@@ -67,41 +86,21 @@ export default function Home({ families }) {
             {errors.recipeName && <div>Recipe Name is a required field.</div>}
           </label>
 
-          <div>
-            <div>Ingredients</div>
-
-            <ul>
-              {ingredientFields.map(({ id }, i) => (
-                <li key={id}>
-                  <input
-                    name={`ingredients[${i}].text`}
-                    ref={register}
-                    type="text"
-                  />
-                </li>
-              ))}
-            </ul>
-
+          <fieldset>
+            <legend>Ingredients</legend>
+            <ul>{ingredientFields.map(getIngredient)}</ul>
             <button onClick={appendIngredient} type="button">
               +
             </button>
-          </div>
+          </fieldset>
 
-          <div>
-            <div>Steps</div>
-
-            <ol>
-              {stepFields.map(({ id }, i) => (
-                <li key={id}>
-                  <textarea name={`steps[${i}].text`} ref={register} />
-                </li>
-              ))}
-            </ol>
-
+          <fieldset>
+            <legend>Steps</legend>
+            <ol>{stepFields.map(getStep)}</ol>
             <button onClick={appendStep} type="button">
               +
             </button>
-          </div>
+          </fieldset>
 
           <button type="submit">Submit</button>
         </form>

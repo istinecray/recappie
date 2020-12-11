@@ -3,9 +3,17 @@ import Head from "next/head";
 import Header from "components/Header";
 import Link from "next/link";
 import styles from "styles/Home.module.css";
-import { getRecipes } from "pages/api/recipes";
+import { getFamilies } from "pages/api/families";
 
-export default function Home({ recipes }) {
+export default function Home({ families }) {
+  const getName = ({ name }) => name;
+
+  const getFamilyRecipes = ({ _id, name, recipes }) => (
+    <p key={_id}>
+      <b>{name}</b>: {recipes.data.map(getName).join(" ")}
+    </p>
+  );
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,9 +21,9 @@ export default function Home({ recipes }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
-
       <main className={styles.main}>
+        <Header />
+
         <ul>
           <li>
             <Link href="/recipes/add">
@@ -24,7 +32,7 @@ export default function Home({ recipes }) {
           </li>
         </ul>
 
-        <p>{JSON.stringify(recipes)}</p>
+        <section>{families.map(getFamilyRecipes)}</section>
       </main>
 
       <Footer />
@@ -33,10 +41,10 @@ export default function Home({ recipes }) {
 }
 
 export async function getStaticProps() {
-  const recipes = await getRecipes();
+  const families = await getFamilies();
 
   const props = {
-    recipes,
+    families,
   };
 
   return {
