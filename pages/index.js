@@ -1,27 +1,30 @@
 import Head from "next/head";
+import Link from "next/link";
 import styles from "styles/Home.module.css";
-import fetcher from "utilities/fetcher";
-import useSwr from "swr";
 
 export default function Home() {
-  const { data, error } = useSwr(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/recipes`,
-    fetcher
-  );
-
   return (
     <div className={styles.container}>
       <Head>
         <title>Recappie</title>
+        <meta name="mobile-web-app-capable" content="yes" />
+        <link rel="manifest" href="manifest.webmanifest" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
+        <ul>
+          <li>
+            <Link href="/recipes">
+              <a>Recipes</a>
+            </Link>
+          </li>
+        </ul>
+
         <h1 className={styles.title}>Recappie</h1>
 
-        <p>
-          {![data, error].some(Boolean) && "Loading..."}
-          {JSON.stringify(error || data)}
+        <p className={styles.description}>
+          An app for collecting family recipes.
         </p>
       </main>
 
