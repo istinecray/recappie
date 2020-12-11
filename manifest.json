@@ -1,0 +1,9 @@
+{
+  "name": "Recappie",
+  "short_name": "Recappie",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "An app for collecting family recipes.",
+  "icons": []
+}

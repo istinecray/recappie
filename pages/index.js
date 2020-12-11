@@ -8,7 +8,7 @@ export default function Home() {
       <Head>
         <title>Recappie</title>
         <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="manifest" href="manifest.webmanifest" />
+        <link rel="manifest" href="manifest.json" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
