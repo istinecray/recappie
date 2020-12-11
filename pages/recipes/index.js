@@ -1,24 +1,12 @@
 import Head from "next/head";
-import makeRequest from "../utilities/makeRequest";
-import styles from "../styles/Home.module.css";
+import styles from "styles/Home.module.css";
+import fetcher from "utilities/fetcher";
 import useSwr from "swr";
-import { gql } from "graphql-request";
 
 export default function Home() {
   const { data, error } = useSwr(
-    gql`
-      {
-        allRecipes {
-          data {
-            name
-            family {
-              name
-            }
-          }
-        }
-      }
-    `,
-    makeRequest
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/recipes`,
+    fetcher
   );
 
   return (
@@ -30,7 +18,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to Recappie!</h1>
+        <h1 className={styles.title}>Recappie</h1>
 
         <p className={styles.description}>
           An app for collecting family recipes.
