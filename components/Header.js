@@ -15,6 +15,12 @@ export default function Header() {
       <nav>
         <ul>
           <li>
+            <Link href="/families">
+              <a>Families</a>
+            </Link>
+          </li>
+
+          <li>
             <Link href="/recipes">
               <a>Recipes</a>
             </Link>

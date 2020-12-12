@@ -3,15 +3,21 @@ import Head from "next/head";
 import Header from "components/Header";
 import Link from "next/link";
 import styles from "styles/Home.module.css";
-import { getRecipes } from "pages/api/recipes";
+import { getFamilies } from "pages/api/families";
 
-export default function Recipes({ recipes }) {
-  const getRecipeNames = ({ _id, name }) => <p key={_id}>{name}</p>;
+export default function Families({ families }) {
+  const getName = ({ name }) => name;
+
+  const getFamilyRecipes = ({ _id, name, recipes }) => (
+    <p key={_id}>
+      <b>{name}</b> {recipes.data.map(getName).join(", ")}
+    </p>
+  );
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>Recappie | Recipes</title>
+        <title>Recappie | Families</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -20,13 +26,13 @@ export default function Recipes({ recipes }) {
 
         <ul>
           <li>
-            <Link href="/recipes/add">
-              <a>Add a Recipe</a>
+            <Link href="/families/add">
+              <a>Add a Family</a>
             </Link>
           </li>
         </ul>
 
-        <section>{recipes.map(getRecipeNames)}</section>
+        <section>{families.map(getFamilyRecipes)}</section>
       </main>
 
       <Footer />
@@ -35,10 +41,10 @@ export default function Recipes({ recipes }) {
 }
 
 export async function getStaticProps() {
-  const recipes = await getRecipes();
+  const families = await getFamilies();
 
   const props = {
-    recipes,
+    families,
   };
 
   return {

@@ -4,8 +4,11 @@ import Header from "components/Header";
 import styles from "styles/Home.module.css";
 import { getFamilies } from "pages/api/families";
 import { useFieldArray, useForm } from "react-hook-form";
+import { useState } from "react";
 
 export default function Home({ families }) {
+  const [ingredientCount, setIngredientCount] = useState(1);
+
   const getDefaultFields = (all, name) => ({
     ...all,
     [name]: [
@@ -15,7 +18,12 @@ export default function Home({ families }) {
     ],
   });
 
-  const defaultValues = ["ingredients", "steps"].reduce(getDefaultFields, {});
+  const defaultValues = [
+    "recipeIngredients",
+    "recipeMeasurements",
+    "recipeSteps",
+    "recipeUnits",
+  ].reduce(getDefaultFields, {});
 
   const { control, errors, handleSubmit, register } = useForm({
     defaultValues,
@@ -29,8 +37,22 @@ export default function Home({ families }) {
 
   const [
     { fields: ingredientFields, append: appendIngredient },
+    { fields: measurementFields, append: appendMeasurement },
     { fields: stepFields, append: appendStep },
-  ] = ["ingredients", "steps"].map(getFieldArray);
+    { fields: unitFields, append: appendUnit },
+  ] = [
+    "recipeIngredients",
+    "recipeMeasurements",
+    "recipeSteps",
+    "recipeUnits",
+  ].map(getFieldArray);
+
+  const appendIngredientFields = () => {
+    setIngredientCount(ingredientCount + 1);
+    appendIngredient();
+    appendMeasurement();
+    appendUnit();
+  };
 
   const getFamily = ({ _id, name }) => (
     <option key={_id} value={_id}>
@@ -38,15 +60,44 @@ export default function Home({ families }) {
     </option>
   );
 
-  const getIngredient = ({ id }, i) => (
-    <li key={id}>
-      <input name={`ingredients[${i}].value`} ref={register()} type="text" />
-    </li>
-  );
+  const getFieldForIndex = (i) => (fields) => fields[i];
+
+  const getId = ({ id }) => id;
+
+  const getIngredient = (_, i) => {
+    const getField = getFieldForIndex(i);
+
+    const [ingredient, measurement, unit] = [
+      ingredientFields,
+      measurementFields,
+      unitFields,
+    ].map(getField);
+
+    const ids = [ingredient, measurement, unit].map(getId);
+    const id = ids.join("-");
+
+    return (
+      <li key={id}>
+        <input
+          name={`recipeMeasurement[${i}].value`}
+          ref={register()}
+          type="number"
+        />
+
+        <input name={`recipeUnit[${i}].value`} ref={register()} type="text" />
+
+        <input
+          name={`recipeIngredients[${i}].value`}
+          ref={register()}
+          type="text"
+        />
+      </li>
+    );
+  };
 
   const getStep = ({ id }, i) => (
     <li key={id}>
-      <textarea name={`steps[${i}].value`} ref={register()} />
+      <textarea name={`recipeSteps[${i}].value`} ref={register()} />
     </li>
   );
 
@@ -88,8 +139,8 @@ export default function Home({ families }) {
 
           <fieldset>
             <legend>Ingredients</legend>
-            <ul>{ingredientFields.map(getIngredient)}</ul>
-            <button onClick={appendIngredient} type="button">
+            <ul>{Array(ingredientCount).fill(null).map(getIngredient)}</ul>
+            <button onClick={appendIngredientFields} type="button">
               +
             </button>
           </fieldset>

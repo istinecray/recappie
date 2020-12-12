@@ -17,9 +17,38 @@ export const getRecipes = async () => {
 
   const {
     allRecipes: { data },
-  } = await runQuery(query);
+  } = await runQuery({
+    query,
+  });
 
   return data;
+};
+
+export const createRecipe = async ({
+  family,
+  name,
+  recipeIngredients,
+  steps,
+}) => {
+  const query = gql`
+    mutation(
+      $family: RecipeFamilyRelation
+      $name: String!
+      $recipeIngredients: RecipeRecipeIngredientsRelation
+      $steps: RecipeStepsRelation
+    ) {
+      createRecipe(
+        data: {
+          family: $family
+          name: $name
+          recipeIngredients: $recipeIngredients
+          steps: $steps
+        }
+      ) {
+        name
+      }
+    }
+  `;
 };
 
 export default async (request, response) => {

@@ -20,7 +20,28 @@ export const getFamilies = async () => {
 
   const {
     allFamilies: { data },
-  } = await runQuery(query);
+  } = await runQuery({
+    query,
+  });
+
+  return data;
+};
+
+export const createFamily = async (request) => {
+  const variables = JSON.parse(request);
+
+  const query = gql`
+    mutation($name: String!) {
+      createFamily(data: { name: $name }) {
+        name
+      }
+    }
+  `;
+
+  const { createFamily: data } = await runQuery({
+    query,
+    variables,
+  });
 
   return data;
 };
@@ -30,10 +51,9 @@ export default async (request, response) => {
 
   switch (request.method) {
     case "POST":
+      const family = await createFamily(request.body);
       response.statusCode = 201;
-      response.send({
-        message: "families: post request received",
-      });
+      response.send(family);
       break;
     case "PUT":
       response.statusCode = 200;
