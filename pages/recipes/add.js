@@ -8,6 +8,20 @@ import { useState } from "react";
 
 export default function Home({ families }) {
   const [ingredientCount, setIngredientCount] = useState(1);
+  const [message, setMessage] = useState(null);
+
+  const onSubmit = async (form) => {
+    try {
+      const { name } = await fetch("/api/recipes", {
+        method: "POST",
+        body: JSON.stringify(form),
+      }).then(getJson);
+
+      setMessage(`Created ${name} recipe :)`);
+    } catch (e) {
+      setMessage(`Couldn't create this recipe :(`);
+    }
+  };
 
   const getDefaultFields = (all, name) => ({
     ...all,
@@ -19,10 +33,10 @@ export default function Home({ families }) {
   });
 
   const defaultValues = [
-    "recipeIngredients",
-    "recipeMeasurements",
-    "recipeSteps",
-    "recipeUnits",
+    "ingredients",
+    "measurements",
+    "steps",
+    "units",
   ].reduce(getDefaultFields, {});
 
   const { control, errors, handleSubmit, register } = useForm({
@@ -40,12 +54,7 @@ export default function Home({ families }) {
     { fields: measurementFields, append: appendMeasurement },
     { fields: stepFields, append: appendStep },
     { fields: unitFields, append: appendUnit },
-  ] = [
-    "recipeIngredients",
-    "recipeMeasurements",
-    "recipeSteps",
-    "recipeUnits",
-  ].map(getFieldArray);
+  ] = ["ingredients", "measurements", "steps", "units"].map(getFieldArray);
 
   const appendIngredientFields = () => {
     setIngredientCount(ingredientCount + 1);
@@ -79,25 +88,23 @@ export default function Home({ families }) {
     return (
       <li key={id}>
         <input
-          name={`recipeMeasurement[${i}].value`}
+          min="0"
+          name={`measurements[${i}].value`}
           ref={register()}
+          step="any"
           type="number"
         />
 
-        <input name={`recipeUnit[${i}].value`} ref={register()} type="text" />
+        <input name={`units[${i}].value`} ref={register()} type="text" />
 
-        <input
-          name={`recipeIngredients[${i}].value`}
-          ref={register()}
-          type="text"
-        />
+        <input name={`ingredients[${i}].value`} ref={register()} type="text" />
       </li>
     );
   };
 
   const getStep = ({ id }, i) => (
     <li key={id}>
-      <textarea name={`recipeSteps[${i}].value`} ref={register()} />
+      <textarea name={`steps[${i}].value`} ref={register()} />
     </li>
   );
 
@@ -114,11 +121,13 @@ export default function Home({ families }) {
 
         <h2>Add a Recipe</h2>
 
-        <form onSubmit={handleSubmit((form) => alert(JSON.stringify(form)))}>
+        {message}
+
+        <form onSubmit={handleSubmit(onSubmit)}>
           <label>
             <div>Family</div>
 
-            <select name="recipeFamily" ref={register()}>
+            <select name="family" ref={register()}>
               {families.map(getFamily)}
             </select>
           </label>
@@ -127,14 +136,14 @@ export default function Home({ families }) {
             <div>Recipe Name</div>
 
             <input
-              name="recipeName"
+              name="name"
               ref={register({
                 required: true,
               })}
               type="text"
             />
 
-            {errors.recipeName && <div>Recipe Name is a required field.</div>}
+            {errors.name && <div>Recipe Name is a required field.</div>}
           </label>
 
           <fieldset>

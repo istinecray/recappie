@@ -1,1 +1,3 @@
-export default uniquify = (collection) => [...new Set(collection)];
+const uniquify = (collection) => [...new Set(collection)];
+
+export default uniquify;
