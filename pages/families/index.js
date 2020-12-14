@@ -40,7 +40,7 @@ export default function Families({ families }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const families = await getFamilies();
 
   const props = {
