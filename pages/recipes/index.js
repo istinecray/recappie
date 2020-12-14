@@ -6,7 +6,24 @@ import styles from "styles/Home.module.css";
 import { getRecipes } from "pages/api/recipes";
 
 export default function Recipes({ recipes }) {
-  const getRecipeNames = ({ _id, name }) => <p key={_id}>{name}</p>;
+  const getRecipeIngredients = ({ ingredient, measurement, unit }) => (
+    <li>
+      {measurement} {unit?.name} {ingredient.name}
+    </li>
+  );
+
+  const getStep = ({ description }) => <li>{description}</li>;
+
+  const getRecipeNames = ({ _id, family, name, recipeIngredients, steps }) => (
+    <article key={_id}>
+      <h3>
+        {name} ({family.name})
+      </h3>
+
+      <ul>{recipeIngredients.data.map(getRecipeIngredients)}</ul>
+      <ol>{steps.data.map(getStep)}</ol>
+    </article>
+  );
 
   return (
     <div className={styles.container}>
@@ -17,6 +34,8 @@ export default function Recipes({ recipes }) {
 
       <main className={styles.main}>
         <Header />
+
+        <h2>Recipes</h2>
 
         <ul>
           <li>

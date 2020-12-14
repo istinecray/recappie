@@ -11,9 +11,26 @@ export const getRecipes = async () => {
     {
       allRecipes {
         data {
-          name
+          _id
           family {
             name
+          }
+          name
+          recipeIngredients {
+            data {
+              ingredient {
+                name
+              }
+              measurement
+              unit {
+                name
+              }
+            }
+          }
+          steps {
+            data {
+              description
+            }
           }
         }
       }
@@ -80,9 +97,11 @@ export const createRecipe = async (request) => {
         connect: ingredient,
       },
       measurement: parseFloat(measurement),
-      unit: {
-        connect: unit,
-      },
+      ...(unit && {
+        unit: {
+          connect: unit,
+        },
+      }),
     };
   };
 
@@ -105,6 +124,8 @@ export const createRecipe = async (request) => {
     recipeIngredients,
     steps,
   };
+
+  console.log(JSON.stringify(variables, "\n"));
 
   const query = gql`
     mutation(

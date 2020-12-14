@@ -1,6 +1,7 @@
 import Footer from "components/Footer";
 import Head from "next/head";
 import Header from "components/Header";
+import getJson from "utilities/getJson";
 import styles from "styles/Home.module.css";
 import { getFamilies } from "pages/api/families";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -19,6 +20,7 @@ export default function Home({ families }) {
 
       setMessage(`Created ${name} recipe :)`);
     } catch (e) {
+      console.log(e);
       setMessage(`Couldn't create this recipe :(`);
     }
   };
