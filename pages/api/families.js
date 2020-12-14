@@ -50,6 +50,11 @@ export default async (request, response) => {
   response.setHeader("Content-Type", "application/json");
 
   switch (request.method) {
+    case "GET":
+      const families = await getFamilies();
+      response.statusCode = 200;
+      response.send(families);
+      break;
     case "POST":
       const family = await createFamily(request.body);
       response.statusCode = 201;
@@ -62,9 +67,8 @@ export default async (request, response) => {
       });
       break;
     default:
-      const families = await getFamilies();
-      response.statusCode = 200;
-      response.send(families);
+      response.statusCode = 404;
+      response.end();
       break;
   }
 };

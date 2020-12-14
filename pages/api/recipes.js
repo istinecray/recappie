@@ -138,6 +138,11 @@ export default async (request, response) => {
   response.setHeader("Content-Type", "application/json");
 
   switch (request.method) {
+    case "GET":
+      const recipes = await getRecipes();
+      response.statusCode = 200;
+      response.send(recipes);
+      break;
     case "POST":
       const recipe = await createRecipe(request.body);
       response.statusCode = 201;
@@ -150,9 +155,8 @@ export default async (request, response) => {
       });
       break;
     default:
-      const recipes = await getRecipes();
-      response.statusCode = 200;
-      response.send(recipes);
+      response.statusCode = 404;
+      response.end();
       break;
   }
 };
