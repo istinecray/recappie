@@ -19,6 +19,7 @@ export default function AddFamily() {
 
       setMessage(`Created ${name} family :)`);
     } catch (e) {
+      console.log(e);
       setMessage(`Couldn't create this family :(`);
     }
   };

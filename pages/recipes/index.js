@@ -6,13 +6,13 @@ import styles from "styles/Home.module.css";
 import { getRecipes } from "pages/api/recipes";
 
 export default function Recipes({ recipes }) {
-  const getRecipeIngredients = ({ ingredient, measurement, unit }) => (
-    <li>
+  const getRecipeIngredients = ({ _id, ingredient, measurement, unit }) => (
+    <li key={_id}>
       {measurement} {unit?.name} {ingredient.name}
     </li>
   );
 
-  const getStep = ({ description }) => <li>{description}</li>;
+  const getStep = ({ _id, description }) => <li key={_id}>{description}</li>;
 
   const getRecipeNames = ({ _id, family, name, recipeIngredients, steps }) => (
     <article key={_id}>

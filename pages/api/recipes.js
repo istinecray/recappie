@@ -13,11 +13,13 @@ export const getRecipes = async () => {
         data {
           _id
           family {
+            _id
             name
           }
           name
           recipeIngredients {
             data {
+              _id
               ingredient {
                 name
               }
@@ -29,6 +31,7 @@ export const getRecipes = async () => {
           }
           steps {
             data {
+              _id
               description
             }
           }
