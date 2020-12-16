@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import runQuery from "utilities/runQuery";
 import { gql } from "graphql-request";
 
@@ -7,6 +8,8 @@ export const login = async (request) => {
     const query = gql`
       query($email: String!) {
         getUserByEmail(email: $email) {
+          _id
+          email
           hash
         }
       }
@@ -15,7 +18,7 @@ export const login = async (request) => {
     const variables = JSON.parse(request);
 
     const {
-      getUserByEmail: { hash },
+      getUserByEmail: { hash, ...user },
     } = await runQuery({
       query,
       variables,
@@ -23,10 +26,21 @@ export const login = async (request) => {
 
     const { password } = variables;
     const success = await bcrypt.compare(password, hash);
-    return success;
+
+    if (success) {
+      const token = jwt.sign(user, process.env.JWT_SECRET, {
+        expiresIn: 3000,
+      });
+
+      return {
+        token,
+      };
+    }
+
+    return {};
   } catch (e) {
     console.log(e);
-    return false;
+    return {};
   }
 };
 
@@ -41,9 +55,9 @@ export default async (request, response) => {
       });
       break;
     case "POST":
-      const user = await login(request.body);
+      const token = await login(request.body);
       response.statusCode = 201;
-      response.send(user);
+      response.send(token);
       break;
     case "PUT":
       response.statusCode = 200;

@@ -2,6 +2,30 @@ import bcrypt from "bcrypt";
 import runQuery from "utilities/runQuery";
 import { gql } from "graphql-request";
 
+export const getUser = async (request) => {
+  try {
+    const query = gql`
+      query($email: String!) {
+        getUserByEmail(email: $email) {
+          _id
+        }
+      }
+    `;
+
+    const variables = JSON.parse(request);
+
+    const { getUserByEmail: data } = await runQuery({
+      query,
+      variables,
+    });
+
+    return data;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 export const createUser = async (request) => {
   try {
     const query = gql`
@@ -44,9 +68,19 @@ export default async (request, response) => {
       });
       break;
     case "POST":
-      const user = await createUser(request.body);
-      response.statusCode = 201;
-      response.send(user);
+      let user = await getUser(request.body);
+
+      if (user) {
+        response.statusCode = 403;
+        response.send({
+          message: "user exists",
+        });
+      } else {
+        user = await createUser(request.body);
+        response.statusCode = 200;
+        response.send(user);
+      }
+
       break;
     case "PUT":
       response.statusCode = 200;

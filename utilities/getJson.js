@@ -1,3 +1,3 @@
-const getJson = (response) => response.json();
+const getJson = (response) => response?.json();
 
 export default getJson;
