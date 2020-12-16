@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import runQuery from "utilities/runQuery";
 import { gql } from "graphql-request";
 

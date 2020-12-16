@@ -8,7 +8,7 @@
     "postbuild": "next-on-netlify"
   },
   "dependencies": {
-    "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
     "eslint": "^7.15.0",
     "graphql": "^15.4.0",
     "graphql-request": "^3.3.0",

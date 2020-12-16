@@ -24,6 +24,8 @@ export default function Families({ families }) {
       <main className={styles.main}>
         <Header />
 
+        <h2>Families</h2>
+
         <ul>
           <li>
             <Link href="/families/add">

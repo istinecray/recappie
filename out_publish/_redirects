@@ -1,2 +1,13 @@
 # Next-on-Netlify Redirects
+\_next\data\6yM3tfrdG_NsWTeowMc_4\families.json  /.netlify/functions/next_families  200
+\_next\data\6yM3tfrdG_NsWTeowMc_4\recipes.json  /.netlify/functions/next_recipes  200
+/_next/data/6yM3tfrdG_NsWTeowMc_4/recipes/add.json  /.netlify/functions/next_recipes_add  200!  Cookie=__prerender_bypass,__next_preview_data
+/api/auth  /.netlify/functions/next_api_auth  200
+/api/families  /.netlify/functions/next_api_families  200
+/api/ingredients  /.netlify/functions/next_api_ingredients  200
 /api/recipes  /.netlify/functions/next_api_recipes  200
+/api/units  /.netlify/functions/next_api_units  200
+/api/users  /.netlify/functions/next_api_users  200
+/families  /.netlify/functions/next_families  200
+/recipes  /.netlify/functions/next_recipes  200
+/recipes/add  /.netlify/functions/next_recipes_add  200!  Cookie=__prerender_bypass,__next_preview_data
