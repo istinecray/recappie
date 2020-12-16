@@ -26,7 +26,6 @@ export const getUnitIdByName = async (name) => {
 };
 
 export const createUnit = async (request) => {
-  console.log(request);
   const variables = JSON.parse(request);
 
   const query = gql`

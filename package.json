@@ -8,9 +8,11 @@
     "postbuild": "next-on-netlify"
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "eslint": "^7.15.0",
     "graphql": "^15.4.0",
     "graphql-request": "^3.3.0",
+    "jsonwebtoken": "^8.5.1",
     "next": "10.0.3",
     "next-on-netlify": "2.6.3",
     "prettier": "^2.2.1",
