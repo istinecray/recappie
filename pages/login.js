@@ -1,12 +1,14 @@
 import Footer from "components/Footer";
 import Head from "next/head";
 import Header from "components/Header";
+import UserContext from "contexts/user";
 import getJson from "utilities/getJson";
 import styles from "styles/Home.module.css";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 
 export default function Login() {
+  const { login } = useContext(UserContext);
   const [message, setMessage] = useState(null);
   const { errors, handleSubmit, register } = useForm();
 
@@ -20,6 +22,7 @@ export default function Login() {
       }).then(getJson);
 
       setMessage(success ? "Logged in :)" : error);
+      login("test");
     } catch (e) {
       console.log(e);
       setMessage(error);

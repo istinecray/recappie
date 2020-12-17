@@ -3,9 +3,10 @@ import Head from "next/head";
 import Header from "components/Header";
 import Link from "next/link";
 import styles from "styles/Home.module.css";
+import withAuth from "middleware/withAuth";
 import { getFamilies } from "pages/api/families";
 
-export default function Families({ families }) {
+const Families = ({ families }) => {
   const getName = ({ name }) => name;
 
   const getFamilyRecipes = ({ _id, name, recipes }) => (
@@ -40,9 +41,11 @@ export default function Families({ families }) {
       <Footer />
     </div>
   );
-}
+};
 
-export async function getServerSideProps() {
+export default Families;
+
+export const getServerSideProps = withAuth(async () => {
   const families = await getFamilies();
 
   const props = {
@@ -52,4 +55,4 @@ export async function getServerSideProps() {
   return {
     props,
   };
-}
+});
