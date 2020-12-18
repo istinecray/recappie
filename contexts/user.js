@@ -1,8 +1,9 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { getJwt, removeJwt, setJwt } from "utilities/jwt";
 
 const defaultState = {
   loggedIn: false,
-  name: "",
+  email: "",
 };
 
 const UserContext = createContext(defaultState);
@@ -10,13 +11,30 @@ const UserContext = createContext(defaultState);
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(defaultState);
 
-  const login = (name) =>
-    setUser({
-      loggedIn: true,
-      name,
-    });
+  useEffect(() => {
+    const currentJwt = getJwt() || {};
 
-  const logout = () => setUser(defaultState);
+    const currentUser = {
+      ...defaultState,
+      ...currentJwt,
+    };
+
+    setUser(currentUser);
+  }, []);
+
+  const login = (jwt) => {
+    setJwt(jwt);
+
+    setUser({
+      ...defaultState,
+      ...jwt,
+    });
+  };
+
+  const logout = () => {
+    removeJwt();
+    setUser(defaultState);
+  };
 
   return (
     <UserContext.Provider

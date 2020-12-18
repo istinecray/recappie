@@ -16,13 +16,13 @@ const Login = () => {
     const error = "Couldn't log in :(";
 
     try {
-      const success = await fetch("/api/auth", {
+      const jwt = await fetch("/api/login", {
         method: "POST",
         body: JSON.stringify(form),
       }).then(getJson);
 
-      setMessage(success ? "Logged in :)" : error);
-      login("test");
+      if (jwt) login(jwt);
+      setMessage(jwt ? "Logged in :)" : error);
     } catch (e) {
       console.log(e);
       setMessage(error);

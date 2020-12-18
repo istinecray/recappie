@@ -1,12 +1,11 @@
 import Cookies from "js-cookie";
 import asyncFind from "utilities/asyncFind";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import runQuery from "utilities/runQuery";
 import { gql } from "graphql-request";
-import { uuid } from "uuidv4";
+import { v4 } from "uuid";
 
-export const createRefreshToken = async ({ refreshToken, userId }) => {
+export const createRefreshToken = async ({ refreshToken = v4(), userId }) => {
   try {
     const query = gql`
       mutation(
@@ -57,6 +56,7 @@ const getRefreshTokens = async (variables) => {
       getUserByEmail(email: $email) {
         refreshTokens {
           data {
+            _id
             expiry
             hash
           }
@@ -75,6 +75,32 @@ const getRefreshTokens = async (variables) => {
   return data;
 };
 
+const getId = ({ _id: id }) => ({
+  id,
+});
+
+const deleteRefreshToken = async (variables) => {
+  const query = gql`
+    mutation($id: String!) {
+      deleteRefreshToken(id: $id) {
+        _id
+      }
+    }
+  `;
+
+  const {
+    deleteRefreshToken: { data },
+  } = await runQuery({
+    query,
+    variables,
+  });
+
+  return data;
+};
+
+const deleteRefreshTokens = async (refreshTokens) =>
+  await Promise.all(refreshTokens.map(deleteRefreshToken));
+
 export const validateRefreshToken = async (variables) => {
   const currentHash = Cookies.get("refreshToken");
   if (!currentHash) return false;
@@ -89,68 +115,14 @@ export const validateRefreshToken = async (variables) => {
   const refreshToken = await asyncFind(refreshTokens, getCurrentRefreshToken);
 
   const { expiry } = refreshToken;
-  const isValid = expiry > Date.now();
+  const isValid = parseInt(expiry) > Date.now();
 
-  return isValid;
-};
-
-export const login = async (request) => {
-  try {
-    const query = gql`
-      query($email: String!) {
-        getUserByEmail(email: $email) {
-          _id
-          email
-          hash
-        }
-      }
-    `;
-
-    const variables = JSON.parse(request);
-
-    const {
-      getUserByEmail: { hash, ...user },
-    } = await runQuery({
-      query,
-      variables,
-    });
-
-    const { password } = variables;
-    let success = await bcrypt.compare(password, hash);
-
-    if (success) {
-      const token = jwt.sign(user, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRY,
-      });
-
-      const refreshToken = uuid();
-
-      Cookies.set("refreshToken", refreshToken, {
-        domain: process.env.DOMAIN,
-        expires: process.env.REFRESH_TOKEN_EXPIRY,
-        httpOnly: true,
-        path: "/",
-        sameSite: true,
-        secure: process.env.NEXT_PUBLIC_BASE_URL.includes("https"),
-      });
-
-      const { _id: userId } = user;
-
-      success = await createRefreshToken({
-        refreshToken,
-        userId,
-      });
-
-      if (success)
-        return {
-          token,
-        };
-    }
-  } catch (e) {
-    console.log(e);
+  if (!isValid) {
+    const refreshTokenIds = refreshTokens.map(getId);
+    await deleteRefreshTokens(refreshTokenIds);
   }
 
-  return {};
+  return isValid;
 };
 
 export default async (request, response) => {
@@ -160,18 +132,19 @@ export default async (request, response) => {
     case "GET":
       response.statusCode = 200;
       response.send({
-        message: "auth: get request received",
+        message: "refreshTokens: get request received",
       });
       break;
     case "POST":
-      const token = await login(request.body);
       response.statusCode = 201;
-      response.send(token);
+      response.send({
+        message: "refreshTokens: post request received",
+      });
       break;
     case "PUT":
       response.statusCode = 200;
       response.send({
-        message: "auth: put request received",
+        message: "refreshTokens: put request received",
       });
       break;
     default:
