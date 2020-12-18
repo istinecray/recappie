@@ -37,5 +37,6 @@ yarn-error.log*
 .netlify
 
 .faunarc
-out_publish
+.vscode
 out_functions
+out_publish

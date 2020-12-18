@@ -7,7 +7,7 @@ import styles from "styles/Home.module.css";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function Login() {
+const Login = () => {
   const { login } = useContext(UserContext);
   const [message, setMessage] = useState(null);
   const { errors, handleSubmit, register } = useForm();
@@ -80,4 +80,6 @@ export default function Login() {
       <Footer />
     </div>
   );
-}
+};
+
+export default Login;

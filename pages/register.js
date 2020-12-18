@@ -6,7 +6,7 @@ import styles from "styles/Home.module.css";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
-export default function Register() {
+const Register = () => {
   const [message, setMessage] = useState(null);
   const { errors, handleSubmit, register } = useForm();
 
@@ -75,4 +75,6 @@ export default function Register() {
       <Footer />
     </div>
   );
-}
+};
+
+export default Register;

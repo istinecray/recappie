@@ -3,7 +3,7 @@ import UserContext from "contexts/user";
 import styles from "styles/Home.module.css";
 import { useContext } from "react";
 
-export default function Header() {
+const Header = () => {
   const {
     user: { loggedIn },
   } = useContext(UserContext);
@@ -59,4 +59,6 @@ export default function Header() {
       </nav>
     </>
   );
-}
+};
+
+export default Header;

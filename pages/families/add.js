@@ -6,7 +6,7 @@ import styles from "styles/Home.module.css";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
-export default function AddFamily() {
+const AddFamily = () => {
   const [message, setMessage] = useState(null);
   const { errors, handleSubmit, register } = useForm();
 
@@ -61,4 +61,6 @@ export default function AddFamily() {
       <Footer />
     </div>
   );
-}
+};
+
+export default AddFamily;

@@ -6,8 +6,9 @@ import styles from "styles/Home.module.css";
 import { getFamilies } from "pages/api/families";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useState } from "react";
+import AddFamily from "pages/families/add";
 
-export default function Home({ families }) {
+const AddRecipe = ({ families }) => {
   const [ingredientCount, setIngredientCount] = useState(1);
   const [message, setMessage] = useState(null);
 
@@ -171,7 +172,7 @@ export default function Home({ families }) {
       <Footer />
     </div>
   );
-}
+};
 
 export async function getStaticProps() {
   const families = await getFamilies();
@@ -184,3 +185,5 @@ export async function getStaticProps() {
     props,
   };
 }
+
+export default AddFamily;

@@ -5,7 +5,7 @@ import Link from "next/link";
 import styles from "styles/Home.module.css";
 import { getRecipes } from "pages/api/recipes";
 
-export default function Recipes({ recipes }) {
+const Recipes = ({ recipes }) => {
   const getRecipeIngredients = ({ _id, ingredient, measurement, unit }) => (
     <li key={_id}>
       {measurement} {unit?.name} {ingredient.name}
@@ -51,7 +51,7 @@ export default function Recipes({ recipes }) {
       <Footer />
     </div>
   );
-}
+};
 
 export async function getServerSideProps() {
   const recipes = await getRecipes();
@@ -64,3 +64,5 @@ export async function getServerSideProps() {
     props,
   };
 }
+
+export default Recipes;
