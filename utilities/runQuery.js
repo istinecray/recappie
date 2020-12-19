@@ -14,7 +14,7 @@ const runQuery = async (request) => {
     method: "POST",
   }).then(getJson);
 
-  errors && console.log(errors);
+  errors && console.error(errors);
   return data;
 };
 

@@ -19,7 +19,7 @@ const AddFamily = () => {
 
       setMessage(`Created ${name} family :)`);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       setMessage(`Couldn't create this family :(`);
     }
   };

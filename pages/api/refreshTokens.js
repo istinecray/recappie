@@ -36,15 +36,15 @@ export const createRefreshToken = async ({ refreshToken = v4(), userId }) => {
     };
 
     const {
-      createRefreshToken: { data },
+      createRefreshToken: { _id },
     } = await runQuery({
       query,
       variables,
     });
 
-    return data;
+    return _id;
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 
   return null;

@@ -21,7 +21,7 @@ export const getUser = async (request) => {
 
     return data;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return null;
   }
 };
@@ -52,9 +52,10 @@ export const createUser = async (request) => {
 
     return data;
   } catch (e) {
-    console.log(e);
-    return null;
+    console.error(e);
   }
+
+  return null;
 };
 
 export default async (request, response) => {

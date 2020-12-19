@@ -21,7 +21,7 @@ const AddRecipe = ({ families }) => {
 
       setMessage(`Created ${name} recipe :)`);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       setMessage(`Couldn't create this recipe :(`);
     }
   };

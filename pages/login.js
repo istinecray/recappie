@@ -2,7 +2,7 @@ import Footer from "components/Footer";
 import Head from "next/head";
 import Header from "components/Header";
 import UserContext from "contexts/user";
-import getJson from "utilities/getJson";
+import getText from "utilities/getText";
 import styles from "styles/Home.module.css";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,12 +19,12 @@ const Login = () => {
       const jwt = await fetch("/api/login", {
         method: "POST",
         body: JSON.stringify(form),
-      }).then(getJson);
+      }).then(getText);
 
       if (jwt) login(jwt);
       setMessage(jwt ? "Logged in :)" : error);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       setMessage(error);
     }
   };

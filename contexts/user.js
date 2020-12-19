@@ -1,5 +1,7 @@
+import jwt from "jsonwebtoken";
 import { createContext, useEffect, useState } from "react";
 import { getJwt, removeJwt, setJwt } from "utilities/jwt";
+import useRedirect from "hooks/useRedirect";
 
 const defaultState = {
   loggedIn: false,
@@ -12,28 +14,36 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(defaultState);
 
   useEffect(() => {
-    const currentJwt = getJwt() || {};
+    const jwtString = getJwt() || {};
+    const token = jwt.decode(jwtString);
 
     const currentUser = {
       ...defaultState,
-      ...currentJwt,
+      ...token,
+      loggedIn: !!token,
     };
 
     setUser(currentUser);
   }, []);
 
-  const login = (jwt) => {
-    setJwt(jwt);
+  const login = (jwtString) => {
+    const token = jwt.decode(jwtString);
+
+    setJwt(jwtString);
 
     setUser({
       ...defaultState,
-      ...jwt,
+      ...token,
+      loggedIn: true,
     });
+
+    useRedirect("/");
   };
 
   const logout = () => {
     removeJwt();
     setUser(defaultState);
+    useRedirect("/");
   };
 
   return (

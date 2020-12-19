@@ -19,7 +19,7 @@ const Register = () => {
 
       setMessage(`Created account ${email} :)`);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       setMessage(`Couldn't create an account for ${email} :(`);
     }
   };

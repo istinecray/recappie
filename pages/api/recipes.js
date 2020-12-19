@@ -128,8 +128,6 @@ export const createRecipe = async (request) => {
     steps,
   };
 
-  console.log(JSON.stringify(variables, "\n"));
-
   const query = gql`
     mutation(
       $family: RecipeFamilyRelation

@@ -5,6 +5,7 @@ import { useContext } from "react";
 
 const Header = () => {
   const {
+    logout,
     user: { loggedIn },
   } = useContext(UserContext);
 
@@ -30,9 +31,7 @@ const Header = () => {
 
           <li>
             {loggedIn ? (
-              <Link href="/logout">
-                <a>Logout</a>
-              </Link>
+              <button onClick={logout}>Logout</button>
             ) : (
               <Link href="/login">
                 <a>Login</a>

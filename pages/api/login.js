@@ -53,13 +53,10 @@ export const login = async (request) => {
         userId,
       });
 
-      if (success)
-        return {
-          token,
-        };
+      if (success) return token;
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 
   return null;
