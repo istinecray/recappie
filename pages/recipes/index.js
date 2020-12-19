@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Page from "components/Page";
 import { getRecipes } from "pages/api/recipes";
 
@@ -25,14 +24,6 @@ const Recipes = ({ recipes }) => {
   return (
     <Page title="Recipes">
       <h2>Recipes</h2>
-
-      <ul>
-        <li>
-          <Link href="/recipes/add">
-            <a>Add a Recipe</a>
-          </Link>
-        </li>
-      </ul>
 
       <section>{recipes.map(getRecipeNames)}</section>
     </Page>

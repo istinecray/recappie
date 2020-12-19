@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Page from "components/Page";
 import withAuth from "middleware/withAuth";
 import { getFamilies } from "pages/api/families";
@@ -15,14 +14,6 @@ const Families = ({ families }) => {
   return (
     <Page title="Families">
       <h2>Families</h2>
-
-      <ul>
-        <li>
-          <Link href="/families/add">
-            <a>Add a Family</a>
-          </Link>
-        </li>
-      </ul>
 
       <section>{families.map(getFamilyRecipes)}</section>
     </Page>
