@@ -1,6 +1,6 @@
 import Link from "next/link";
 import UserContext from "contexts/user";
-import styles from "styles/Home.module.css";
+import styles from "styles/Page.module.css";
 import { useContext } from "react";
 
 const Header = () => {

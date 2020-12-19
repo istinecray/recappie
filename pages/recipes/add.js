@@ -1,12 +1,9 @@
-import Footer from "components/Footer";
-import Head from "next/head";
-import Header from "components/Header";
+import Page from "components/Page";
 import getJson from "utilities/getJson";
-import styles from "styles/Home.module.css";
+import useRedirect from "hooks/useRedirect";
 import { getFamilies } from "pages/api/families";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useState } from "react";
-import AddFamily from "pages/families/add";
 
 const AddRecipe = ({ families }) => {
   const [ingredientCount, setIngredientCount] = useState(1);
@@ -14,12 +11,12 @@ const AddRecipe = ({ families }) => {
 
   const onSubmit = async (form) => {
     try {
-      const { name } = await fetch("/api/recipes", {
+      await fetch("/api/recipes", {
         method: "POST",
         body: JSON.stringify(form),
       }).then(getJson);
 
-      setMessage(`Created ${name} recipe :)`);
+      useRedirect("/recipes");
     } catch (e) {
       console.error(e);
       setMessage(`Couldn't create this recipe :(`);
@@ -112,65 +109,53 @@ const AddRecipe = ({ families }) => {
   );
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Recappie | Add Recipe</title>
-        <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Page title="Add a Recipe">
+      <h2>Add a Recipe</h2>
 
-      <main className={styles.main}>
-        <Header />
+      {message}
 
-        <h2>Add a Recipe</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <label>
+          <div>Family</div>
 
-        {message}
+          <select name="family" ref={register()}>
+            {families.map(getFamily)}
+          </select>
+        </label>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label>
-            <div>Family</div>
+        <label>
+          <div>Recipe Name</div>
 
-            <select name="family" ref={register()}>
-              {families.map(getFamily)}
-            </select>
-          </label>
+          <input
+            name="name"
+            ref={register({
+              required: true,
+            })}
+            type="text"
+          />
 
-          <label>
-            <div>Recipe Name</div>
+          {errors.name && <div>Recipe Name is a required field.</div>}
+        </label>
 
-            <input
-              name="name"
-              ref={register({
-                required: true,
-              })}
-              type="text"
-            />
+        <fieldset>
+          <legend>Ingredients</legend>
+          <ul>{Array(ingredientCount).fill(null).map(getIngredient)}</ul>
+          <button onClick={appendIngredientFields} type="button">
+            +
+          </button>
+        </fieldset>
 
-            {errors.name && <div>Recipe Name is a required field.</div>}
-          </label>
+        <fieldset>
+          <legend>Steps</legend>
+          <ol>{stepFields.map(getStep)}</ol>
+          <button onClick={appendStep} type="button">
+            +
+          </button>
+        </fieldset>
 
-          <fieldset>
-            <legend>Ingredients</legend>
-            <ul>{Array(ingredientCount).fill(null).map(getIngredient)}</ul>
-            <button onClick={appendIngredientFields} type="button">
-              +
-            </button>
-          </fieldset>
-
-          <fieldset>
-            <legend>Steps</legend>
-            <ol>{stepFields.map(getStep)}</ol>
-            <button onClick={appendStep} type="button">
-              +
-            </button>
-          </fieldset>
-
-          <button type="submit">Submit</button>
-        </form>
-      </main>
-
-      <Footer />
-    </div>
+        <button type="submit">Submit</button>
+      </form>
+    </Page>
   );
 };
 
@@ -186,4 +171,4 @@ export async function getStaticProps() {
   };
 }
 
-export default AddFamily;
+export default AddRecipe;

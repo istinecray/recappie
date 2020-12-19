@@ -1,8 +1,5 @@
-import Footer from "components/Footer";
-import Head from "next/head";
-import Header from "components/Header";
 import Link from "next/link";
-import styles from "styles/Home.module.css";
+import Page from "components/Page";
 import withAuth from "middleware/withAuth";
 import { getFamilies } from "pages/api/families";
 
@@ -16,30 +13,19 @@ const Families = ({ families }) => {
   );
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Recappie | Families</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Page title="Families">
+      <h2>Families</h2>
 
-      <main className={styles.main}>
-        <Header />
+      <ul>
+        <li>
+          <Link href="/families/add">
+            <a>Add a Family</a>
+          </Link>
+        </li>
+      </ul>
 
-        <h2>Families</h2>
-
-        <ul>
-          <li>
-            <Link href="/families/add">
-              <a>Add a Family</a>
-            </Link>
-          </li>
-        </ul>
-
-        <section>{families.map(getFamilyRecipes)}</section>
-      </main>
-
-      <Footer />
-    </div>
+      <section>{families.map(getFamilyRecipes)}</section>
+    </Page>
   );
 };
 

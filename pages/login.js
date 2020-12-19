@@ -1,9 +1,6 @@
-import Footer from "components/Footer";
-import Head from "next/head";
-import Header from "components/Header";
+import Page from "components/Page";
 import UserContext from "contexts/user";
 import getText from "utilities/getText";
-import styles from "styles/Home.module.css";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -30,55 +27,43 @@ const Login = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Recappie | Login</title>
-        <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Page title="Login">
+      <h2>Login</h2>
 
-      <main className={styles.main}>
-        <Header />
+      {message}
 
-        <h2>Login</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <label>
+          <div>Email</div>
 
-        {message}
+          <input
+            name="email"
+            ref={register({
+              required: true,
+            })}
+            type="text"
+          />
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label>
-            <div>Email</div>
+          {errors.email && <div>Email is a required field.</div>}
+        </label>
 
-            <input
-              name="email"
-              ref={register({
-                required: true,
-              })}
-              type="text"
-            />
+        <label>
+          <div>Password</div>
 
-            {errors.email && <div>Email is a required field.</div>}
-          </label>
+          <input
+            name="password"
+            ref={register({
+              required: true,
+            })}
+            type="password"
+          />
 
-          <label>
-            <div>Password</div>
+          {errors.password && <div>Password is a required field.</div>}
+        </label>
 
-            <input
-              name="password"
-              ref={register({
-                required: true,
-              })}
-              type="password"
-            />
-
-            {errors.password && <div>Password is a required field.</div>}
-          </label>
-
-          <button type="submit">Submit</button>
-        </form>
-      </main>
-
-      <Footer />
-    </div>
+        <button type="submit">Submit</button>
+      </form>
+    </Page>
   );
 };
 

@@ -1,8 +1,6 @@
-import Footer from "components/Footer";
-import Head from "next/head";
-import Header from "components/Header";
+import Page from "components/Page";
 import getJson from "utilities/getJson";
-import styles from "styles/Home.module.css";
+import useRedirect from "hooks/useRedirect";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
@@ -12,12 +10,12 @@ const AddFamily = () => {
 
   const onSubmit = async (form) => {
     try {
-      const { name } = await fetch("/api/families", {
+      await fetch("/api/families", {
         method: "POST",
         body: JSON.stringify(form),
       }).then(getJson);
 
-      setMessage(`Created ${name} family :)`);
+      useRedirect("/families");
     } catch (e) {
       console.error(e);
       setMessage(`Couldn't create this family :(`);
@@ -25,41 +23,29 @@ const AddFamily = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Recappie | Add Family</title>
-        <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Page title="Add a Family">
+      <h2>Add a Family</h2>
 
-      <main className={styles.main}>
-        <Header />
+      {message}
 
-        <h2>Add a Family</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <label>
+          <div>Family Name</div>
 
-        {message}
+          <input
+            name="name"
+            ref={register({
+              required: true,
+            })}
+            type="text"
+          />
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label>
-            <div>Family Name</div>
+          {errors.name && <div>Family Name is a required field.</div>}
+        </label>
 
-            <input
-              name="name"
-              ref={register({
-                required: true,
-              })}
-              type="text"
-            />
-
-            {errors.name && <div>Family Name is a required field.</div>}
-          </label>
-
-          <button type="submit">Submit</button>
-        </form>
-      </main>
-
-      <Footer />
-    </div>
+        <button type="submit">Submit</button>
+      </form>
+    </Page>
   );
 };
 
